@@ -57,7 +57,7 @@ for i = 1:numberOfImages
   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
   %! Contrast Enhancement and Gaussian filtering of Image.
-  lowHigh = stretchlim(imgData);
+  lowHigh = stretchlimits(imgData);
   fprintf('\tContrast Streching Limits: [ Low: %0.2f High: %0.2f]\n', stretchlim(imgData));
   increasedContrastImgData = imadjust(imgData);
   inversedImageData = imcomplement(increasedContrastImgData); % Inverse Contrast Streched Input Image
@@ -89,7 +89,7 @@ for i = 1:numberOfImages
   subplot(2, 2, 4); imshow(reconstructedImage); title("\fontsize{6} \color{gray} {Reconstructed Image}")
   saveas(gcf, [outputPath tempImageNameDir{1} '_Output' '/Segmentation_Plot.png']);
   
-  ratio = 0.01;
+  ratio = 0.1;
   kernelsize = 5;
   maxdist = 5;
   qsSegmentedImage = vl_quickseg(reconstructedImage, ratio, kernelsize, maxdist);
