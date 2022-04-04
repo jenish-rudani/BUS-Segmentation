@@ -15,8 +15,8 @@ end
 mkdir(outputPath);
 
 %% Get Input Image Files
-[inputImageNameList, inputImageDirectoryPath, ~] = uigetfile('./data/input/*.png', 'Select Input BUS Images', 'MultiSelect', 'on');
-[inputGTNameList, inputGTDirectoryPath, ~] = uigetfile('./data/GT/*.png', 'Select Corresponding Ground Truth Images', 'MultiSelect', 'on');
+[inputImageNameList, inputImageDirectoryPath, ~] = uigetfile('./data/input/*.png', 'Select Input BUS Images', 'MultiSelect', 'off');
+[inputGTNameList, inputGTDirectoryPath, ~] = uigetfile('./data/GT/*.png', 'Select Corresponding Ground Truth Images', 'MultiSelect', 'off');
 
 if isa(inputImageNameList, 'cell')
   numberOfImages = numel(inputImageNameList); %Returns the number of elements from Input Array
@@ -67,9 +67,9 @@ for i = 1:numberOfImages
   subplot(2, 2, 1); imshow(imgData); title('\fontsize{6} \color{gray} {Input BUS Image}')
   subplot(2, 2, 2); imshow(increasedContrastImgData); title("\fontsize{6} \color{gray} {Contrast Streched Image (lowIn = " + num2str(lowHigh(1)) + ") (highIn = " + num2str(lowHigh(2)) + ")}")
   subplot(2, 2, 3); imshow(inversedImageData); title("\fontsize{6} \color{gray} {Inversed Higher Contrast Image}");
-  subplot(2, 2, 4); imshow(preprocessedImageData); title("\fontsize{6} \color{gray} {Filtered Image (Gaussian Low-Pass Filter Fitlers Speckle)}")
+  subplot(2, 2, 4); imshow(preprocessedImageData); title("\fontsize{6} \color{gray} {Filtered Image (Gaussian Low-Pass Filter (For Speckle)}")
   tempImageNameDir = split(imageName, ".");
-  saveas(gcf, [outputPath tempImageNameDir{1} '_Output' '/Preprocessing_Plot.png']);
+  saveas(gcf, [outputPath tempImageNameDir{1} '_Output' '/1_Preprocessing_Plot.png']);
   fprintf('\tCompleted Pre Processing: ( "%s" )\n---------------------------------------------------------------\n\n', imageName);
 
   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -84,10 +84,10 @@ for i = 1:numberOfImages
 
   figure;
   subplot(2, 2, 1); imshow(preprocessedImageData); title('\fontsize{6} \color{gray} {Filtered Image from previous stage}')
-  subplot(2, 2, 2); imshow(normalizedImageData); title("\fontsize{6} \color{gray} {Normalized Image}")
-  subplot(2, 2, 3); imshow(clearBorderImageData); title("\fontsize{6} \color{gray} {Bordere Cleared}");
-  subplot(2, 2, 4); imshow(reconstructedImage); title("\fontsize{6} \color{gray} {Reconstructed Image}")
-  saveas(gcf, [outputPath tempImageNameDir{1} '_Output' '/Segmentation_Plot.png']);
+  subplot(2, 2, 2); imshow(normalizedImageData); title("\fontsize{6} \color{gray} {Normalized & Thresholded Image}")
+  subplot(2, 2, 3); imshow(clearBorderImageData); title("\fontsize{6} \color{gray} {Light Structures Suppresed}");
+  subplot(2, 2, 4); imshow(reconstructedImage); title("\fontsize{6} \color{gray} {Flood-Filled Image (Hole)}")
+  saveas(gcf, [outputPath tempImageNameDir{1} '_Output' '/2_Segmentation_Plot.png']);
   
   ratio = 0.1;
   kernelsize = 5;
@@ -103,8 +103,8 @@ for i = 1:numberOfImages
   
   figure;
   subplot(2, 1, 1); imshow(qsSegmentedImage); title('\fontsize{6} \color{gray} {Quick Shift Segmented Image}')
-  subplot(2, 1, 2); imshow(normalizedSegmentedImage); title("\fontsize{6} \color{gray} {Segmented Image after Normalization and Threshold (0.8)}")
-  saveas(gcf, [outputPath tempImageNameDir{1} '_Output' '/PostProcessing_Plot.png']);
+  subplot(2, 1, 2); imshow(normalizedSegmentedImage); title("\fontsize{6} \color{gray} {Segmented Image after Normalization and Thresholding (0.8)}")
+  saveas(gcf, [outputPath tempImageNameDir{1} '_Output' '/3_PostProcessing_Plot.png']);
   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
   %%%%%%%%%%%%%%%%%%%%%%%%%% Results %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -118,5 +118,5 @@ for i = 1:numberOfImages
   figure;
   subplot(2, 1, 1); imshow(ssm); title("\fontsize{6} \color{gray} {Segmented Lesion Produced by Algorithm}")
   subplot(2, 1, 2); imshow(gtLesion); title('\fontsize{6} \color{gray} {Segmeted Lesion using Provided GT}')
-  saveas(gcf, [outputPath tempImageNameDir{1} '_Output' '/Result_Comparison_Plot.png']);
+  saveas(gcf, [outputPath tempImageNameDir{1} '_Output' '/4_Result_Comparison_Plot.png']);
 end
